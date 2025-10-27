@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\HomeContent;
+use App\Models\Footer;
+use App\Models\Contact;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,12 +24,24 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         View::composer('*', function ($view) {
-        // cache for 60 seconds or longer if you want
-        $homeContents = cache()->remember('home_contents_all', 60, function () {
-            return HomeContent::all()->keyBy('key');
-        });
+            // Cache for 60 seconds to improve performance
+            $homeContents = cache()->remember('home_contents_all', 60, function () {
+                return HomeContent::all()->keyBy('key');
+            });
 
-        $view->with('homeContents', $homeContents);
-    });
+            $footers = cache()->remember('footers_all', 60, function () {
+                return Footer::all();
+            });
+
+            $siteContact = cache()->remember('site_contact', 60, function () {
+                return Contact::first();
+            });
+
+            $view->with([
+                'homeContents' => $homeContents,
+                'footers' => $footers,
+                'siteContact' => $siteContact,
+            ]);
+        });
     }
 }
