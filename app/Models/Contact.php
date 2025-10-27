@@ -3,8 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Contact extends Model
 {
-    //
+    use HasFactory;
+
+    protected $fillable = [
+        'phone',
+        'email',
+        'address',
+        'map_url',
+        'whatsapp',
+        'business_hours'
+    ];
 }
