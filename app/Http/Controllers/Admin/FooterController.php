@@ -32,13 +32,17 @@ class FooterController extends Controller
      */
     public function store(Request $request)
     {
-        //
-         $request->validate([
-            'title' => 'required',
-            'description' => 'required',
+        $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'facebook_url' => 'nullable|url|max:255',
+            'twitter_url' => 'nullable|url|max:255',
+            'instagram_url' => 'nullable|url|max:255',
+            'linkedin_url' => 'nullable|url|max:255',
+            'youtube_url' => 'nullable|url|max:255',
         ]);
 
-        Footer::create($request->only(['title', 'description']));
+        Footer::create($data);
         return redirect()->route('admin.footers.index')->with('success', 'Footer added successfully!');
     }
 
@@ -55,7 +59,7 @@ class FooterController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $footer = Footer::findOrFail($id);
         return view('admin.footers.edit', compact('footer'));
     }
 
@@ -64,13 +68,19 @@ class FooterController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required',
+        $footer = Footer::findOrFail($id);
+        
+        $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'facebook_url' => 'nullable|url|max:255',
+            'twitter_url' => 'nullable|url|max:255',
+            'instagram_url' => 'nullable|url|max:255',
+            'linkedin_url' => 'nullable|url|max:255',
+            'youtube_url' => 'nullable|url|max:255',
         ]);
 
-        $footer->update($request->only(['title', 'description']));
+        $footer->update($data);
         return redirect()->route('admin.footers.index')->with('success', 'Footer updated successfully!');
     }
 
@@ -79,7 +89,7 @@ class FooterController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $footer = Footer::findOrFail($id);
         $footer->delete();
         return redirect()->route('admin.footers.index')->with('success', 'Footer deleted successfully!');
     }

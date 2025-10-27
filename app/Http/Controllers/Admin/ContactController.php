@@ -36,7 +36,10 @@ class ContactController extends Controller
         $data = $request->validate([
             'phone' => 'required|string|max:20',
             'email' => 'required|email|max:255',
-            'address' => 'nullable|string|max:255'
+            'address' => 'nullable|string|max:255',
+            'map_url' => 'nullable|url|max:500',
+            'whatsapp' => 'nullable|string|max:20',
+            'business_hours' => 'nullable|string'
         ]);
 
         Contact::create($data);
@@ -57,7 +60,7 @@ class ContactController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $contact = Contact::findOrFail($id);
         return view('admin.contacts.edit', compact('contact'));
     }
 
@@ -66,11 +69,15 @@ class ContactController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $contact = Contact::findOrFail($id);
+        
         $data = $request->validate([
             'phone' => 'required|string|max:20',
             'email' => 'required|email|max:255',
-            'address' => 'nullable|string|max:255'
+            'address' => 'nullable|string|max:255',
+            'map_url' => 'nullable|url|max:500',
+            'whatsapp' => 'nullable|string|max:20',
+            'business_hours' => 'nullable|string'
         ]);
 
         $contact->update($data);
@@ -83,7 +90,7 @@ class ContactController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $contact = Contact::findOrFail($id);
         $contact->delete();
         return redirect()->route('admin.contacts.index')->with('success', 'Contact deleted successfully.');
     }
